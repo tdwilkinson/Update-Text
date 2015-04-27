@@ -5,12 +5,13 @@ from sys import argv
 import os
 import fileinput
 
-# still a work in progress!
+# still a work in progress!  
 
-#################had to update text file: make first couple twomassid's floats 
+################# change what to append the file name to at the bottom! 
+################# had to update text file: make first couple twomassid's floats 
 
 # set path to text file
-filepath = os.path.abspath('../APO_KeplerMd_target.txt')
+filepath = os.path.abspath('../APO_KeplerMd_target.txt') # does not interate, must change name to appended file name to keep updates from original
 
 # set column names up (will make it easier to generalize later)
 KIC = 'KIC'
@@ -244,7 +245,7 @@ while True:
 
 
 def writeToFile(data):
-	newfile = filepath[0:len(filepath) - 4] + '.star' + '.txt'   # so that star is appended to the file name
+	newfile = filepath[0:len(filepath) - 4] + '.updated' + '.txt'   # so that star is appended to the file name
 	f = open(newfile, 'w')
 	f.write('# Column Names \n')
 	f.write('#  \n')
