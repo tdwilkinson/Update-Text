@@ -38,10 +38,14 @@ while True:
 
 	print 'Please type the KIC Number or "exit":'
 	userinput_1 = raw_input('>  ')	
+
 	if userinput_1 == ('exit'):   #just incase ya wanna quit
 		break	
-	if userinput_1 == '':
+
+	if userinput_1 == '': #kic number in question
 		continue
+
+
 	kicnumber = -1
 	for KIC in df.index:
 		if int(userinput_1) == KIC:
@@ -49,48 +53,54 @@ while True:
 			print df.loc[KIC]
 			kicnumber = KIC
 			break
+
 	if kicnumber == -1:
 		print 'KIC number not found' 
 		continue
+
 	# Ask which property to update:
 	print 'Enter 1 = Change/Append a property'
 	print 'Enter 2 = Update another star: '
 	userinput_2 = raw_input('>  ')
+
 	if userinput_2 == ('1'):
-		print 'Enter a number to choose which property to update:'
-		print '1. Rotation Period'
-		print '2. Rotation Period Error'
-		print '3. Effective Temperature' 
-		print '4. Log G'
-		print '5. KP mag' 
-		print "6. g mag"
-		print "7. z mag"
-		print '8. J mag'
-		print '9. K mag'
-		print '10. Planet Count'
-		print '11. 2Mass ID Number'
-		print '12. Observation Date in Low Resolution'
-		print '13. Observation Date in High Resolution'
-		def printfunc(KIC,colname):
-			print df.get_value(KIC,colname)
+		print 'Enter in the number for the property to update:'
+		choices = []
+		num = range(0,23)
+		array = [ 'Prot', 'Prot_e','Teff','logg','kpmag','gmag','zmag','jmag','kmag','planet','twomassid','t2','mystery','obsLR','obsHR','KEPLER_2massid','KEPLERTeff', 'KEPLERrmag','KEPLERJmag','KEPLERmag','KEPLERg_r','KEPLERlogg','KEPLER_Z','KEPLER_Eb_v']
+		for y in array:
+			for x in num:
+				print str(x) +'.  '+ y
+				break     #not quite but close enough for now
+
+		def printfunc(rowLabel, columnLabel):
+			print columnLabel + '\t' + str(df.get_value(rowLabel, columnLabel))
+			#print df.get_value(df.loc[KIC],array[int(userinput_3)-1])
 			print 'Enter value to update to: '
-			enteredvalue = KIC
-		num = np.array(0:23)
-		array = [ 'Prot', 'Prot_e','Teff','logg','kpmag','gmag','zmag','jmag','kmag','planet','twomassid','t2','mystery','obsLR','obsHR','KEPLER_2massid','KEPLERTeff', 'KEPLERrmag','KEPLERJmag','KEPLERmag','KEPLERg_r','KEPLERlogg','KEPLER_Z','KEPLER_Eb_v']	
-	
+		
+		
 		# user chooses parameter to update
 		userinput_3 = raw_input('>  ')
-		for decision in userinput_3:
-			if userinput_3 == any(num):
-			printfunc(KIC,array)	
+
+		if int(userinput_3) in num:
+			printfunc(kicnumber, array[int(userinput_3)])
 			userinput_decision = raw_input('>  ')			
-			enteredvalue = userinput_decision
-			print enteredvalue		
+			df.set_value(kicnumber, array[int(userinput_3)], userinput_decision)
+			print 	str(kicnumber) + '\t' + array[int(userinput_3)] + '\t' + str(df.get_value(kicnumber, array[int(userinput_3)]))
+		elif userinput_3 == 'exit':
+			print 'nope!'
+			break	
+		elif userinput_3 != num:
+			print 'err... '
+			break
 '''
+####
 
 		# user updates parameters
 		if userinput_3 == '1':
-			
+		
+Prot 45.34356
+45.234567	
 
 		if userinput_3 == '2':
 			printfunc(KIC,'Prot_e')	
