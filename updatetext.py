@@ -77,12 +77,16 @@ while True:
 		num = range(0,25)
 		for y in colnames:
 			for x in num:
-				print str(x) +'.  '+  y
-				print '99.  ' + userinput_newcol
-				break     #not quite but close enough for now
+				if userinput_2 == ('1'):
+					print str(x) +'.  '+  y
+					print '99.  ' + userinput_newcol
+					break     #not quite but close enough for now
+				else:
+					print str(x) + '.  '+  y
+					break
 
 		def printfunc(rowLabel, columnLabel):
-			print columnLabel + '\t' + str(df.get_value(rowLabel, columnLabel))
+			print kicnumber + columnLabel + '\t' + str(df.get_value(rowLabel, columnLabel))
 			print 'Enter value to update to: '
 		
 		# user chooses parameter to update
@@ -93,6 +97,7 @@ while True:
 			printfunc(kicnumber, colnames[int(userinput_3)])
 			userinput_decision = raw_input('>  ')	
 			if userinput_decision == '':
+				print 'property not updated'
 				continue
 			else:
 				df.set_value(kicnumber, colnames[int(userinput_3)], userinput_decision)
@@ -103,11 +108,12 @@ while True:
 			printfunc(kicnumber, str(userinput_newcol))
 			userinput_decision = raw_input('>  ')	
 			if userinput_decision == '':
+				print 'property not updated'
 				continue
 			else:
 				df.set_value(kicnumber, [str(userinput_newcol)], userinput_decision)
 			#print 	str(kicnumber) + '\t' +[str(userinput_newcol)] + '\t' + str(df.get_value(kicnumber, [str(userinput_newcol)]))
-			print 'seeing is believing here'
+			print 'seeing is believing here -- fix bug'
 			continue
 			#printfunc(kicnumber, colnames[int()])		
 		
@@ -177,7 +183,7 @@ while True:
 
 
 #write the file anew each time
-df.to_csv('../mergefiles.txt',sep=',',header = (str(colnames)+str(userinput_newcol)))
+df.to_csv('../mergefiles.txt',sep=',',header = (str(colnames)))  #+str(userinput_newcol)))
  # try columns keyword to only get certain columns - get rid of mystery?
 
 #helpful links:
