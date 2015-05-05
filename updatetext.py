@@ -13,23 +13,16 @@ import pandas as pd
 ################# do not run in background (with &)
 ################# change what to append the file name to at the bottom! add variable for this up top
 
-#mergefiles.py for how I combined data frames
-# for reference : 
-#colnames = [ 'Prot', 'Prot_e','Teff','logg','kpmag','gmag','zmag','jmag','kmag','planet','twomassid','t2','mystery','obsLR','obsHR','KEPLER_2massid','KEPLERTeff', 'KEPLERrmag','KEPLERJmag','KEPLERmag','KEPLERg_r','KEPLERlogg','KEPLER_Z','KEPLER_Eb_v']
+#mergefiles.py for how I combined data frames of text file and kepler information. do same for Prot
 
 # should load all the information i need: 
-df = pd.DataFrame.from_csv('../mergefiles.txt',sep=',',header = 0)
-#print df.head(3) #test
-#print df.index
-#print type(df)
-#want to add two columns next to LR HR if Ha or CaIII was observed
 
+df = pd.DataFrame.from_csv('../mergefiles.txt',sep=',',header = 0)
+colnames = list(df.columns.values)
 
 #Starting program Checks: 
 print 'Update-Text Activated.' 
 #print 'Reading %s' % filepath	
-
-#print df
 
 #Beginning Program:
 
@@ -58,45 +51,75 @@ while True:
 		continue
 
 	# Ask which property to update:
-	print 'Enter 1 = Change/Append a property'
-	print 'Enter 2 = Add a property to this star'
+	print 'Enter 1 = Add a property'
+	print 'Enter 2 = Change/Append a property' 
 	print 'Enter 3 = Update another star: '
+	print "or 'exit' "
 	userinput_2 = raw_input('>  ')
 
+	# this option allows for a new property (column) to be added
 	if userinput_2 == ('1'):
+		print 'Enter new column name:'
+		userinput_newcol = raw_input('>  ')
+		print 'enter value to add to new column'
+		userinput_newcolvalue = raw_input('>  ')
+		if userinput_newcolvalue == '':
+			continue
+		else:
+			df.assign(color_g_z = df['gmag'] - df['zmag']).head()
+			df.insert(20,userinput_newcol,value = userinput_newcolvalue, allow_duplicates=False)
+			continue
+
+	# this option allows a property to be changed or appended to	
+	elif userinput_2 == ('2'):
 		print 'Enter in the number for the property to update:'
 		choices = []
-		num = range(0,23)
-		array = [ 'Prot', 'Prot_e','Teff','logg','kpmag','gmag','zmag',
-			'jmag','kmag','planet','twomassid','t2','mystery','obsLR',
-			'obsHR','KEPLER_2massid','KEPLERTeff', 'KEPLERrmag','KEPLERJmag',
-			'KEPLERmag','KEPLERg_r','KEPLERlogg','KEPLER_Z','KEPLER_Eb_v']
-		for y in array:
+		num = range(0,25)
+		for y in colnames:
 			for x in num:
-				print str(x) +'.  '+ y
+				print str(x) +'.  '+  y
+				print '99.  ' + userinput_newcol
 				break     #not quite but close enough for now
 
 		def printfunc(rowLabel, columnLabel):
 			print columnLabel + '\t' + str(df.get_value(rowLabel, columnLabel))
-			#print df.get_value(df.loc[KIC],array[int(userinput_3)-1])
 			print 'Enter value to update to: '
-		
 		
 		# user chooses parameter to update
 		userinput_3 = raw_input('>  ')
 
+		# if they chose a property (column) that already existed
 		if int(userinput_3) in num:
-			printfunc(kicnumber, array[int(userinput_3)])
-			userinput_decision = raw_input('>  ')			
-			df.set_value(kicnumber, array[int(userinput_3)], userinput_decision)
-			print 	str(kicnumber) + '\t' + array[int(userinput_3)] + '\t' + str(df.get_value(kicnumber, array[int(userinput_3)]))
+			printfunc(kicnumber, colnames[int(userinput_3)])
+			userinput_decision = raw_input('>  ')	
+			if userinput_decision == '':
+				continue
+			else:
+				df.set_value(kicnumber, colnames[int(userinput_3)], userinput_decision)
+			print 	str(kicnumber) + '\t' + colnames[int(userinput_3)] + '\t' + str(df.get_value(kicnumber, colnames[int(userinput_3)]))
+		
+		# if they chose a property (column) that was created with option 1		
+		elif userinput_3 == '99':
+			printfunc(kicnumber, str(userinput_newcol))
+			userinput_decision = raw_input('>  ')	
+			if userinput_decision == '':
+				continue
+			else:
+				df.set_value(kicnumber, [str(userinput_newcol)], userinput_decision)
+			#print 	str(kicnumber) + '\t' +[str(userinput_newcol)] + '\t' + str(df.get_value(kicnumber, [str(userinput_newcol)]))
+			print 'seeing is believing here'
+			continue
+			#printfunc(kicnumber, colnames[int()])		
+		
+		# if finished		
 		elif userinput_3 == 'exit':
 			print 'nope!'
 			break	
-		elif userinput_3 != num:
-			print 'err... '
-			break
 
+		# error message when it doesn't understand
+		elif userinput_3 != num or '99':
+			print 'err... '
+			break # for now
 
 
 		'''if userinput_3 == '11':    #This one takes up two columns currently and needs to be re-defined better
@@ -143,151 +166,21 @@ while True:
 				userinput_newDate = raw_input('>  ')
 				row[14] = userinput_newDate
 				print row'''
-
-	elif userinput_2 == ('2'):
-		userinput_newcol = raw_input('> ')
-		print 'work in progress!'
-		#df.insert(20, userinput_newcol, array-like,allow_duplicates=False).head()	
-
+	
+	# to get back to choose kic option
 	elif userinput_2 == ('3'):
-		continue	
-'''	
-############### do stuffs with columns in panda:
+		continue
 
-mdwarf.assign(color_g_z = mdwarf['gmag'] - mdwarf['zmag']).head() # to make a new column out of old
-dataframe.insert ( to add column)
+	# to exit the program
+	elif userinput_2 == 'exit':
+		break	
 
-############## write to file: 
 
-def writeToFile(data):
-	newfile = filepath[0:len(filepath) - 4] + 'test' + '.txt'   # increase number right now so that updates are appended to the file name
-	f = open(newfile, 'w')
-	f.write("# #          KID       Prot       e_Prot   Teff     logg   	 KPmag     	  g'      	 z'       Jmag      Kmag 	 Planet? 	2MassID 	  DATE_OBSERVED_LR   DATE_OBSERVED_HR \n") 
-	f.write('#  \n')
-	for i in range(len(data)):  # for each row index
-		for j in range(15): # for each column index (change to total number of columns)
-			f.write(str(data[i][j]) + ',') #write to file + tab 
-		#f.write(str(data[i][13]).rjust(18))
-		#f.write(str(data[i][14]).rjust(27))
-		f.write('\n')
-	f.flush # read in memory of the writer and commit to file
-	f.close #close after editing
-
-writeToFile(data)
-
-print 'Saved new version of: %s.' % filepath
-
-# ADD PROPERTY TO CHOOSE OPTION - 
-
+#write the file anew each time
+df.to_csv('../mergefiles.txt',sep=',',header = (str(colnames)+str(userinput_newcol)))
+ # try columns keyword to only get certain columns - get rid of mystery?
 
 #helpful links:
 # http://learnpythonthehardway.org/book/ex15.html
 # https://docs.python.org/2/library/functions.html#raw_input
-
-# old method: 
-
-
-# set path to text file
-filepath = os.path.abspath('../APO_KeplerMd_target.updated.txt') # does not interate, must change name to appended file name to keep updates from original
-
-# set column names up (will make it easier to generalize later)
-KIC = 'KIC'
-Prot = 'Prot'
-Prot_e = 'Prot_e'
-Teff = 'Teff'
-logg = 'logg'
-kpmag = 'kpmag'
-gmag = 'gmag'
-zmag = 'zmag'
-jmag = 'jmag'
-kmag = 'kmag'
-#KEPLER_Teff = 'KEPLER_Teff'
-#KEPLER_rmag = 'KEPLER_rmag'
-#KEPLER_Jmag = 'KEPLER_Jmag'
-#KEPLER_Mag = 'KEPLER_Mag'
-#KEPLER_Colorg-r = 'KEPLER_Color'
-#KEPLER_logg = 'KEPLER_logg'
-#KEPLER_Z = 'KEPLER_Z' #metallicity
-#KEPLER_r = 'KEPLER_r' #solar radius = 0.0
-#KEPLER_Eb-v = 'KEPLER_Eb-v'
-planet = 'planet'
-twomassid = 'twomassid'
-twomassid2 = 'twomassid2'
-obsLR = 'obsLR'
-LRha = 'LRha'
-LRcaIII = 'LRcaIII'
-obsHR = 'obsHR'
-HRha = 'HRha'
-HRcaIII = 'HRcaIII'
-
-# set types to columns
-types = \
-	[
-		(KIC, int),
-		(Prot, float),
-		(Prot_e,float),
-		(Teff,float),
-		(logg,float),
-		(kpmag,float),
-		(gmag,float),
-		(zmag,float),
-		(jmag,float),
-		(kmag,float),
-		#(KEPLER_Teff),int),
-		#(KEPLER_rmag, float),
-		#(KEPLER_Jmag, float),
-		#(KEPLER_Mag, float),
-		#(KEPLER_Colorg-r, float),
-		#(KEPLER_logg, float),
-		#(KEPLER_Z, float),
-		#(KEPLER_r, float),
-		#(KEPLER_Eb-v, float),
-		(planet,int),
-		(twomassid,float),
-		(twomassid2,object),
-		(obsLR, object),
-		(obsHR, object)
-	]
-
-# load these with loadtext
-data = np.loadtxt(filepath, usecols = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], dtype = types, skiprows = 2)
-
-#test:
-#print data[0]
-#print data[KIC][0]
-#print data[planet][0]
-#print data[twomassid][0]
-#print data[obsLR][0]
-#print data[obsHR][0]
-
-working on this part:
-
-while True:
-
-	#row = None
-
-	print 'Please type the KIC Number or "exit":'
-	
-	userinput_1 = raw_input('>  ')
-	
-	if userinput_1 == ('exit'):
-		break
-	
-	if userinput_1 == '':
-		continue
-
-	for index, value in enumerate(data[KIC]): # enumerate numbers the items in this column
-		if userinput_1 == str(value):
-			row = data[index]
-			break  #this tells the for loop to stop checking the column
-	if row==None:
-		print 'KIC Number not found.'
-		continue
-
-	print 'This is the data currently for this star: '
-	print row
-
-	# Ask which property to update:
-	print 'Enter 1 = Update a property '
-	print 'Enter 2 = Update another star: '
-'''
+# http://pandas.pydata.org/pandas-docs/dev/generated/pandas.DataFrame.html
