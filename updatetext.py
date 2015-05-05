@@ -22,7 +22,6 @@ df = pd.DataFrame.from_csv('../mergefiles.txt',sep=',',header = 0)
 #print df.head(3) #test
 #print df.index
 #print type(df)
-
 #want to add two columns next to LR HR if Ha or CaIII was observed
 
 
@@ -60,14 +59,18 @@ while True:
 
 	# Ask which property to update:
 	print 'Enter 1 = Change/Append a property'
-	print 'Enter 2 = Update another star: '
+	print 'Enter 2 = Add a property to this star'
+	print 'Enter 3 = Update another star: '
 	userinput_2 = raw_input('>  ')
 
 	if userinput_2 == ('1'):
 		print 'Enter in the number for the property to update:'
 		choices = []
 		num = range(0,23)
-		array = [ 'Prot', 'Prot_e','Teff','logg','kpmag','gmag','zmag','jmag','kmag','planet','twomassid','t2','mystery','obsLR','obsHR','KEPLER_2massid','KEPLERTeff', 'KEPLERrmag','KEPLERJmag','KEPLERmag','KEPLERg_r','KEPLERlogg','KEPLER_Z','KEPLER_Eb_v']
+		array = [ 'Prot', 'Prot_e','Teff','logg','kpmag','gmag','zmag',
+			'jmag','kmag','planet','twomassid','t2','mystery','obsLR',
+			'obsHR','KEPLER_2massid','KEPLERTeff', 'KEPLERrmag','KEPLERJmag',
+			'KEPLERmag','KEPLERg_r','KEPLERlogg','KEPLER_Z','KEPLER_Eb_v']
 		for y in array:
 			for x in num:
 				print str(x) +'.  '+ y
@@ -93,71 +96,10 @@ while True:
 		elif userinput_3 != num:
 			print 'err... '
 			break
-'''
-####
 
-		# user updates parameters
-		if userinput_3 == '1':
-		
-Prot 45.34356
-45.234567	
 
-		if userinput_3 == '2':
-			printfunc(KIC,'Prot_e')	
-			userinput_Prot_e = raw_input('>  ')			
-			enteredvalue = userinput_Prot_e
-			print enteredvalue
 
-		if userinput_3 == '3':
-			printfunc(KIC,'Teff')	
-			userinput_Teff = raw_input('>  ')
-			enteredvalue = userinput_Teff
-			print enteredvalue
-
-		if userinput_3 == '4':
-			printfunc(KIC,'logg')
-			userinput_logg = raw_input('>  ')			
-			enteredvalue = userinput_logg
-			print enteredvalue
-
-		if userinput_3 == '5':
-			printfunc(KIC,'kpmag')
-			userinput_KPmag = raw_input('>  ')			
-			enteredvalue = userinput_KPmag
-			print enteredvalue
-
-		if userinput_3 == '6':
-			printfunc(KIC, 'gmag')
-			userinput_gmag = raw_input('>  ')			
-			enteredvalue = userinput_gmag
-			print enteredvalue	
-
-		if userinput_3 == '7':
-			printfunc(KIC, 'zmag')		
-			print 'Enter value to update to: '
-			userinput_zmag = raw_input('>  ')	
-			enteredvalue = userinput_zmag
-			print enteredvalue
-
-		if userinput_3 == '8':
-			printfunc(KIC, 'jmag')
-			userinput_jmag = raw_input('>  ')			
-			enteredvalue = userinput_jmag
-			print enteredvalue
-
-		if userinput_3 == '9':
-			printfunc(KIC, 'kmag')
-			userinput_kmag = raw_input('>  ')			
-			enteredvalue = userinput_kmag
-			print enteredvalue
-
-		if userinput_3 == '10':
-			printfunc(KIC, 'planet')
-			userinput_planet = raw_input('>  ')			
-			enteredvalue = userinput_planet
-			print enteredvalue
-
-		if userinput_3 == '11':    #This one takes up two columns currently and needs to be re-defined better
+		'''if userinput_3 == '11':    #This one takes up two columns currently and needs to be re-defined better
 			print 'Current 2MASS ID Number: '
 			print str(row[11]) + str(row[12])
 			print 'Enter 1st part of value up to +'
@@ -200,12 +142,16 @@ Prot 45.34356
 				print 'Enter Date update to:'
 				userinput_newDate = raw_input('>  ')
 				row[14] = userinput_newDate
-				print row
-
+				print row'''
 
 	elif userinput_2 == ('2'):
+		userinput_newcol = raw_input('> ')
+		print 'work in progress!'
+		#df.insert(20, userinput_newcol, array-like,allow_duplicates=False).head()	
+
+	elif userinput_2 == ('3'):
 		continue	
-	
+'''	
 ############### do stuffs with columns in panda:
 
 mdwarf.assign(color_g_z = mdwarf['gmag'] - mdwarf['zmag']).head() # to make a new column out of old
