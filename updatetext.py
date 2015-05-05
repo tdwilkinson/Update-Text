@@ -86,7 +86,7 @@ while True:
 					break
 
 		def printfunc(rowLabel, columnLabel):
-			print kicnumber + columnLabel + '\t' + str(df.get_value(rowLabel, columnLabel))
+			print str(kicnumber) +'\t'  columnLabel + '\t' + str(df.get_value(rowLabel, columnLabel))
 			print 'Enter value to update to: '
 		
 		# user chooses parameter to update
