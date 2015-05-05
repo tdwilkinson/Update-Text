@@ -66,7 +66,7 @@ while True:
 		if userinput_newcolvalue == '':
 			continue
 		else:
-			df.assign(color_g_z = df['gmag'] - df['zmag']).head()
+			#df.assign(color_g_z = df['gmag'] - df['zmag']).head()
 			df.insert(20,userinput_newcol,value = userinput_newcolvalue, allow_duplicates=False)
 			continue
 
